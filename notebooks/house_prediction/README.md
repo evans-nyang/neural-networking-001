@@ -1,4 +1,4 @@
-# House Prediction Using Keras
+# House Price Prediction Using Keras
 
 Exploring how to use Keras package to build a neural network to predict if house prices are above or below median value.
 
@@ -72,7 +72,7 @@ We've reduced the number of input features and changed the task into predicting 
 
 ## Usage
 
-### Data Exploration and Processing
+### Data Processing
 
 Before we code any ML algorithm, the first thing we need to do is to put our data in a format that the algorithm will want. In particular, we need to:
 
@@ -81,13 +81,79 @@ Before we code any ML algorithm, the first thing we need to do is to put our dat
 3. Scale the data (we call this normalization) so that the input features have similar orders of magnitude.
 4. Split our dataset into the training set, the validation set and the test set
 
-#### Reading in the CSV file
+### Data Exploration
 
-We can use the pandas library to read in the CSV file. The pandas library is a powerful library that allows us to manipulate data easily.
+Exploring our data features by priting the output of the `df` variable:
 
 ```python
-import pandas as pd
-
-# Read in the CSV file
-df = pd.read_csv('house_prediction.csv')
+print(df)
 ```
+
+We have our input features in the first ten columns:
+
+- Lot Area (in sq ft)
+- Overall Quality (scale from 1 to 10)
+- Overall Condition (scale from 1 to 10)
+- Total Basement Area (in sq ft)
+- Number of Full Bathrooms
+- Number of Half Bathrooms
+- Number of Bedrooms above ground
+- Total Number of Rooms above ground
+- Number of Fireplaces
+- Garage Area (in sq ft)
+
+In our last column, we have the feature that we would like to predict:
+
+- Is the house price above the median or not? (1 for yes and 0 for no)
+
+## Summary
+
+### Neural Network
+
+Coding up this neural network required only a few lines of code:
+
+- We specify the architecture with the Keras Sequential model.
+- We specify some of our settings (optimizer, loss function, metrics to track) with `model.compile`
+- We train our model (find the best parameters for our architecture) with the training data with `model.fit`
+- We evaluate our model on the test set with `model.evaluate`
+
+To deal with overfitting, we can code in the following strategies into our model each with about one line of code:
+
+- L2 Regularization:
+  - L2 regularization is a technique used to prevent overfitting in neural
+  networks. It adds a penalty term to the loss function, which encourages the model to have smaller weights. This helps to reduce the complexity of the model and prevent it from memorizing the training data too well. By adding L2 regularization, we can improve the generalization ability of the model and reduce the risk of overfitting.
+  To add L2 regularization, notice that we’ve added a bit of extra code in each of our dense layers like this:
+
+  ```python
+  kernel_regularizer=regularizers.l2(0.01)
+  ```
+
+- Dropout
+  - This is a technique used in neural networks to prevent overfitting. It randomly sets a fraction of input units to 0 at each update during training, which helps to reduce the reliance on specific input features and encourages the network to learn more robust and generalizable representations.
+  To add Dropout, we added a new layer like this:
+
+  ```python
+  Dropout(0.3),
+  ```
+
+  This means that the neurons in the previous layer has a probability of 0.3 in dropping out during training.
+
+### Consolidated Summary
+
+We’ve written Python code to:
+
+- Explore and Process the Data
+- Build and Train our Neural Network
+- Visualize Loss and Accuracy
+- Add Regularization to our Neural Network
+
+## Extras
+
+Some additional resources for assistance
+- [Keras Documentation](https://keras.io/api/)
+
+- [Tensorflow Documentation](https://www.tensorflow.org/api_docs/python/tf)
+
+- [Scikit-learn Documentation](https://scikit-learn.org/0.21/documentation.html)
+
+- [Pandas Documentation](https://pandas.pydata.org/docs/user_guide/index.html)
